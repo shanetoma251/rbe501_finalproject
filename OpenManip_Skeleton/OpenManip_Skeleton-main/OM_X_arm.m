@@ -29,9 +29,9 @@ classdef OM_X_arm < handle
         % controlling the motors individually on occasion.
         function self = OM_X_arm()
             % Load Libraries
-            if ~libisloaded(DX_XM430_W350.LIB_NAME)
-                [notfound, warnings] = loadlibrary(DX_XM430_W350.LIB_NAME, 'dynamixel_sdk.h', 'addheader', 'port_handler.h', 'addheader', 'packet_handler.h', 'addheader', 'group_bulk_read.h', 'addheader', 'group_bulk_write.h');
-            end
+            %if ~libisloaded(DX_XM430_W350.LIB_NAME)
+                %[notfound, warnings] = loadlibrary(DX_XM430_W350.LIB_NAME, 'dynamixel_sdk.h', 'addheader', 'port_handler.h', 'addheader', 'packet_handler.h', 'addheader', 'group_bulk_read.h', 'addheader', 'group_bulk_write.h');
+            % end
 
             self.motorsNum = 4;
             self.motorIDs = [11, 12, 13, 14];
