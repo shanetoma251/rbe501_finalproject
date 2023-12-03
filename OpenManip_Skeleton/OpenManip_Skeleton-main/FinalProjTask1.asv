@@ -1,6 +1,6 @@
 % RBE 501 Team 3 Task 1 Code
 clear all; close all; clc;
-addpath('mr')
+%addpath('mr')
 
 %% Screws and Link Info
 l1 = 36.076e-3; l2 = 60.10e-3; l3 = 128e-3; l4 = 24e-3; l5 = 124e-3; l6 = 133.4e-3;
@@ -56,9 +56,9 @@ for i = (tA+0.001):-0.0001:(tA-0.001)
     eomg = 0.001;
     ev = 0.0001;
     Tsd_A = [[0 -sin(i) -cos(i); 0 cos(i) -sin(i); 1 0 0] A; 0 0 0 1];
-    [gen_thetalistA, success] = IKinSpace(Slist,M,Tsd_A,guess_thetalistA,eomg,ev);
+    [gen_thetalistA, success] = IKinSpace(Slist,M,Tsd_A,guess_thetalistA,eomg,ev)
     if success == 1
-        disp(['Generated Theta Values for A: ', num2str(rad2deg(gen_thetalistA(:)'))]);
+        %disp(['Generated Theta Values for A: ', num2str(rad2deg(gen_thetalistA(:)'))]);
         break;
     else
         % disp('IK for A Failed');
@@ -71,7 +71,7 @@ for j = (tB-0.001):0.0001:(tB+0.001)
     Tsd_B = [[0 -sin(j) -cos(j); 0 cos(j) -sin(j); 1 0 0] B; 0 0 0 1];
     [gen_thetalistB, success] = IKinSpace(Slist,M,Tsd_B,guess_thetalistB,eomg,ev);
     if success == 1
-        disp(['Generated Theta Values for B: ', num2str(rad2deg(gen_thetalistB(:)'))]);
+        %disp(['Generated Theta Values for B: ', num2str(rad2deg(gen_thetalistB(:)'))]);
         break;
     else
         % disp('IK for B Failed');
@@ -105,31 +105,26 @@ V = 1; %NOT SURE WHAT THIS VELOCITY VALUE SHOULD BE
 % robot.writeJoints(gen_thetalistA)
 jointval0 = [];
 tb = 2;
-%start loop to travel between q0 and qf
 tic;
 ellapsedTime  = toc;
 while ellapsedTime <= tf
-    %parabolic up
     if ellapsedTime <= tb
         jointvals = q0 + (V/2*tb)*ellapsedTime^2;
         %robot.writeJoints(jointvals);
         disp(jointvals)
     end
-    %linear
     if ellapsedTime > tb && ellapsedTime <= tf-tb
         jointvals = (q0 + qf - V*tf)/2 + V*ellapsedTime;
         %robot.writeJoints(jointvals);
         disp(jointvals)
     end
-    %parabolic down
     if ellapsedTime > tf-tb && ellapsedTime <= tf
        jointvals = qf - ((tf-ellapsedTime)^2*V)/2*tb;
        %robot.writeJoints(jointvals);
        disp(jointvals)
     end
     ellapsedTime = toc;
-    %track the value of any joint 
-    jointval0 = [jointval0,jointvals(4)];
+    jointval0 = [jointval0,jointvals(1)];
     pause(0.1)
 end
 %% 
