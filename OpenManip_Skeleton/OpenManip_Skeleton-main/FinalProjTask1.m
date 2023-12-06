@@ -84,63 +84,118 @@ Tsd_C = [[0 0 -1 0.185];[0 1 0 0];[1 0 0 0.2];[0 0 0 1]];
 t0 = 0;
 tf = 5;
 tb = 2;
-q0 = gen_thetalistA;
+qi = gen_thetalistA;
 
 %generate joint angles for point c
 thetalistc_guess = [deg2rad(0); deg2rad(-5); deg2rad(25); deg2rad(-20)];
 [gen_thetalistC, success] = IKinSpace(Slist,M,Tsd_C,thetalistc_guess,eomg,ev);
 qf = gen_thetalistC;
+qf-qi
 
 %% Sending trajectory to the robot
 %init
-travelTime = 2; % Defines the travel time
 
-V = 1; %NOT SURE WHAT THIS VELOCITY VALUE SHOULD BE
+V_J1 = 3/2*(qf(1)-qi(1))/tf;
+V_J2 = 3/2*(qf(2)-qi(2))/tf;
+V_J3 = 3/2*(qf(3)-qi(3))/tf;
+V_J4 = 3/2*(qf(4)-qi(4))/tf;
 
+tb1 = (qi(1) - qf(1) + V_J1*tf)/V_J1;
+tb2 = (qi(2) - qf(2) + V_J2*tf)/V_J2;
+tb3 = (qi(3) - qf(3) + V_J3*tf)/V_J3;
+tb4 = (qi(4) - qf(4) + V_J4*tf)/V_J4;
 
-% robot = Robot(); % Creates robot object
-% robot.writeTime(travelTime); % Write travel time
-% robot.writeMotorState(true); % Write position mode
-% %send robot to point A to start trajectory
-% robot.writeJoints(gen_thetalistA)
-jointval0 = [];
-tb = 2;
-%start loop to travel between q0 and qf
-tic;
-ellapsedTime  = toc;
-while ellapsedTime <= tf
-    %parabolic up
-    if ellapsedTime <= tb
-        jointvals = q0 + (V/2*tb)*ellapsedTime^2;
-        %robot.writeJoints(jointvals);
-        disp(jointvals)
+N = 1000;
+
+tpoints = linspace(0,5,N);
+
+for i=1:N
+    t = tpoints(i);
+    if t <= tb1
+        jointvals(1,i) = qi(1) + (V_J1/(2*tb1))*t^2;
+    elseif (t > tb1 && t <= (tf-tb1))
+        jointvals(1,i) = (qi(1) + qf(1) - V_J1*tf)/2 + V_J1*t;
+    elseif t > (tf-tb1) && t <= tf
+        alpha = (V_J1/tb1);
+        jointvals(1,i) =  qf(1) - alpha/2*tf^2 + alpha*tf*t - alpha/2 * t^2;
     end
-    %linear
-    if ellapsedTime > tb && ellapsedTime <= tf-tb
-        jointvals = (q0 + qf - V*tf)/2 + V*ellapsedTime;
-        %robot.writeJoints(jointvals);
-        disp(jointvals)
+    if t <= tb2
+        jointvals(2,i) = qi(2) + (V_J2/(2*tb2))*t^2;
+    elseif (t > tb2 && t <= (tf-tb2))
+        jointvals(2,i) = (qi(2) + qf(2) - V_J2*tf)/2 + V_J2*t;
+    elseif t > (tf-tb2) && t <= tf
+        alpha = (V_J2/tb2);
+        jointvals(2,i) = qf(2) - alpha/2*tf^2 +alpha*tf*t - alpha/2 * t^2;
     end
-    %parabolic down
-    if ellapsedTime > tf-tb && ellapsedTime <= tf
-       jointvals = qf - ((tf-ellapsedTime)^2*V)/2*tb;
-       %robot.writeJoints(jointvals);
-       disp(jointvals)
+    if t <= tb3
+        jointvals(3,i) = qi(3) + (V_J3/(2*tb3))*t^2;
+    elseif (t > tb3 && t <= (tf-tb3))
+        jointvals(3,i) = (qi(3) + qf(3) - V_J3*tf)/2 + V_J3*t;
+    elseif t > (tf-tb3) && t <= tf
+        alpha = (V_J3/tb3);
+        jointvals(3,i) = qf(3) - alpha/2*tf^2 + alpha*tf*t - alpha/2 * t^2;
     end
-    ellapsedTime = toc;
-    %track the value of any joint 
-    jointval0 = [jointval0,jointvals(4)];
-    pause(0.1)
+    if t <= tb4
+        jointvals(4,i) = qi(4) + (V_J4/(2*tb4))*t^2;
+    elseif (t > tb4 && t <= (tf-tb4))
+        jointvals(4,i) = (qi(4) + qf(4) - V_J4*tf)/2 + V_J4*t;
+    elseif t > (tf-tb4) && t <= tf
+        alpha = (V_J4/tb4);
+        jointvals(4,i) = qf(4) - alpha/2*tf^2 + alpha*tf*t - alpha/2 * t^2;
+    end
 end
-%% 
-%plot to analyze lspb curve
-%weird jump between parabolic and linear parts
+
+% travelTime = 2; % Defines the travel time
+% 
+% V = 2*(mean(qf - qi))/tf; %NOT SURE WHAT THIS VELOCITY VALUE SHOULD BE
+% tb = (mean(abs(qi - qf)) + V*tf)/V
+% 
+% 
+% % robot = Robot(); % Creates robot object
+% % robot.writeTime(travelTime); % Write travel time
+% % robot.writeMotorState(true); % Write position mode
+% % %send robot to point A to start trajectory
+% % robot.writeJoints(gen_thetalistA)
+% jointval0 = [];
+% % tb = 2;
+% %start loop to travel between q0 and qf
+% tic;
+% elapsedTime  = toc;
+% while elapsedTime <= tf
+%     %parabolic up
+%     if elapsedTime <= tb
+%         jointvals = qi + (V/(2*tb))*elapsedTime^2;
+%         %robot.writeJoints(jointvals);
+%         disp(jointvals)
+%     end
+%     %linear
+%     if elapsedTime > tb && elapsedTime <= (tf-tb)
+%         jointvals = (qi + qf - V*tf)/2 + V*elapsedTime;
+%         %robot.writeJoints(jointvals);
+%         disp(jointvals)
+%     end
+%     %parabolic down
+%     if elapsedTime > tf-tb && elapsedTime <= tf
+%        alpha = V/tb;
+%        jointvals = qf - alpha*tf^2 /2 - alpha/2 * elapsedTime^2;
+%        %robot.writeJoints(jointvals);
+%        disp(jointvals)
+%     end
+%     elapsedTime = toc;
+%     %track the value of any joint 
+%     jointval0 = [jointval0,jointvals(4)];
+%     pause(0.1)
+% end
+% % 
+% %plot to analyze lspb curve
+% %weird jump between parabolic and linear parts
 figure
-tplot = 0:0.1:5;
-plot(tplot,jointval0)
-
-
-
-
-
-
+% tplot = linspace(0,5,50);
+subplot(2,2,1);
+plot(tpoints,jointvals(1,:));
+subplot(2,2,2);
+plot(tpoints,jointvals(2,:));
+subplot(2,2,3);
+plot(tpoints,jointvals(3,:));
+subplot(2,2,4);
+plot(tpoints,jointvals(4,:));
