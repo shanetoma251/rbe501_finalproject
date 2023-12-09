@@ -1,6 +1,6 @@
 % RBE 501 Team 3 Task 1 Code
 clear all; close all; clc;
-addpath('mr')
+addpath '/home/zhun/fl_23/ModernRobotics-master/ModernRobotics-master/packages/MATLAB/mr'
 
 %% Screws and Link Info
 l1 = 36.076e-3; l2 = 60.10e-3; l3 = 128e-3; l4 = 24e-3; l5 = 124e-3; l6 = 133.4e-3;

@@ -1,0 +1,30 @@
+% RBE 501 Team 3 Task 1 Code
+addpath(pathdef)
+travelTime = 0.5; % Defines the travel time
+robot = Robot(); % Creates robot object
+robot.writeTime(travelTime); % Write travel time
+%% collecting values
+robot.writeMode('position');
+robot.writeJoints(0); % Write joints to zero position
+pause(2); % Wait for trajectory completion in 2s
+robot.writeMode('velocity')
+
+maxVel = 44; % RPM, from: ...
+
+maxVel_rad = maxVel / 60 * 2 * pi;
+
+% velocity waypoints for joint 2
+vel_waypoints = [1, 0.8, 0.6, 0.4] .* maxVel_rad; 
+for i = vel_waypoints
+
+curr = zeros([1,4]);
+tic; % Start timer
+
+while toc < travelTime
+    readings =  robot.getJointsReadings(); % Read joint values
+    curr = [curr;readings(3,:)];
+end
+
+robot.writeGripper(false);
+
+pause(1);
