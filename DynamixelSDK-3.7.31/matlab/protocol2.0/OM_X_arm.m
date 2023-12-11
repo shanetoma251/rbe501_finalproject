@@ -6,8 +6,10 @@
 classdef OM_X_arm < handle
     properties
         % DX_XM430_W350 Servos
-        motor2_offset = -45; % Example offset, adjust as needed
-        motor3_offset = -48;
+        % motor2_offset = -45; % Example offset, adjust as needed
+        % motor3_offset = -48;
+        motor2_offset = 0;
+        motor3_offset = 0;
         motorsNum;
         motorIDs;
         gripperID;
@@ -40,7 +42,7 @@ classdef OM_X_arm < handle
             % Find serial port and connect to it
             try
                 devices = serialportlist();
-                ttyDevs = devices(contains(devices,"/dev/ttyUSB2"));
+                ttyDevs = devices(contains(devices,"/dev/ttyUSB6"));
                 self.deviceName = convertStringsToChars(ttyDevs(1));
             catch exception
                 error("Failed to connect via serial, no devices found.")

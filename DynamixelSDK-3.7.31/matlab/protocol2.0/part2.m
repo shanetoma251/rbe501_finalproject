@@ -5,16 +5,19 @@ addpath(pathdef)
 
 % run part2_calculation first to get jointvals_path
 % A to C to B in degrees
+
 joint_path = [jointvals_path1, jointvals_path2] .* 180 ./ pi;
 
 travelTime = 20; % Defines the overall travel time
 step_time = 0.2; % Each waypoint lasts 0.1s
 steps = travelTime/step_time;
-index_jump = length(joint_path)/steps; % sampling the path with this index jump
+index_jump = length(joint_path)/steps; % sampling the path with this index jump/increment
+
 
 % initialize the robot, set step time, and enable motor holding at last
 % pose
 robot = Robot(); % Creates robot object
+robot.writeMode('curr position');
 robot.writeMotorState(true); % Write position mode
 
 robot.writeTime(2); % travelling for 2s
@@ -31,8 +34,8 @@ vel = zeros([1,4]);
 curr = zeros([1,4]);
 
 robot.writeTime(step_time)
-for i = 1:length(joint_path) % Iterate through waypoints
-    index = i*index_jump
+for i = 1:(length(joint_path)-1) % Iterate through waypoints
+    index = i*index_jump;
     robot.writeJoints([joint_path(1, index),...
         joint_path(2, index),...
         joint_path(3, index),...

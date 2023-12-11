@@ -4,6 +4,7 @@ addpath(pathdef)
 % pose
 robot = Robot(); % Creates robot object
 robot.writeMotorState(true); % Write position mode
+robot.writeMode('curr position');
 
 robot.writeTime(2); % travelling for 2s
 robot.writeJoints(0); % Write joints to zero position
@@ -23,11 +24,9 @@ loop = 1;
 while loop == 1 % stop this process with ctrl+C
     
     tic; % Start timer
-    pause(2) % let it stay at A for 5s for first question in part A
 
-    fprintf('The external wrench can be applied now.')
 
-    while toc < travelTime
+    while 1
        readings =  robot.getJointsReadings(); % Read joint values
        pos = [pos;readings(1,:)];
        vel = [vel;readings(2,:)];
