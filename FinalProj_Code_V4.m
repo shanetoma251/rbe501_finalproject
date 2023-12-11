@@ -180,22 +180,22 @@ plot(tpoints,t2_qs(1,:)); hold on; grid on;
 plot(tpoints,t2_qs(2,:));
 plot(tpoints,t2_qs(3,:));
 plot(tpoints,t2_qs(4,:));
-xlabel('Time, $t$ (s)',Interpreter='latex'); ylabel('Joint Position, $q$ (deg)',Interpreter='latex')
-legend('Joint 1','Joint 2','Joint 3','Joint 4','Location','best'); title('Joint Positions LSPB with Pause',Interpreter='latex');
+xlabel('Time, $t$ (s)','fontsize',14,Interpreter='latex'); ylabel('Joint Position, $q$ (deg)','fontsize',14,Interpreter='latex')
+legend('Joint 1','Joint 2','Joint 3','Joint 4','Location','best'); title('Joint Positions LSPB with Pause','fontsize',16,Interpreter='latex');
 t2_vel_plot = figure;
 plot(tpoints,t2_vels(1,:)); hold on; grid on;
 plot(tpoints,t2_vels(2,:));
 plot(tpoints,t2_vels(3,:));
 plot(tpoints,t2_vels(4,:));
-xlabel('Time, t (s)'); ylabel('Joint Velocities, $\dot{q}$ ($\frac{\mathrm{deg}}{\mathrm{s}}$)',Interpreter='latex')
-legend('Joint 1','Joint 2','Joint 3','Joint 4','Location','best'); title('Joint Velocities LSPB with Pause',Interpreter='latex');
+xlabel('Time, $t$ (s)','fontsize',16,Interpreter='latex'); ylabel('Joint Velocities, $\dot{q}$ ($\frac{\mathrm{deg}}{\mathrm{s}}$)','fontsize',14,Interpreter='latex')
+legend('Joint 1','Joint 2','Joint 3','Joint 4','Location','best'); title('Joint Velocities LSPB with Pause','fontsize',16,Interpreter='latex');
 t2_acc_plot = figure;
 plot(tpoints(1:999),t2_accs(1,:)); hold on; grid on;
 plot(tpoints(1:999),t2_accs(2,:));
 plot(tpoints(1:999),t2_accs(3,:));
 plot(tpoints(1:999),t2_accs(4,:));
-xlabel('Time, $t$ (s)',Interpreter='latex'); ylabel('Joint Accelerations, $\ddot{q}$ ($\frac{\mathrm{deg}}{\mathrm{s}^2}$)',Interpreter='latex')
-legend('Joint 1','Joint 2','Joint 3','Joint 4','Location','best'); title('Joint Accelerations LSPB with Pause',Interpreter='latex');
+xlabel('Time, $t$ (s)','fontsize',14,Interpreter='latex'); ylabel('Joint Accelerations, $\ddot{q}$ ($\frac{\mathrm{deg}}{\mathrm{s}^2}$)','fontsize',14,Interpreter='latex')
+legend('Joint 1','Joint 2','Joint 3','Joint 4','Location','best'); title('Joint Accelerations LSPB with Pause','fontsize',16,Interpreter='latex');
 
 %% Task 3 Stitched LSPB with Constant Velocity at C - Vel Control
 qA = gen_thetalistA; qB = gen_thetalistB; qC = gen_thetalistC;
@@ -286,9 +286,9 @@ t3_vel_axes = axes(t3_vels_plot,'visible','off');
 t3_vel_axes.Title.Visible='on';
 t3_vel_axes.XLabel.Visible='on';
 t3_vel_axes.YLabel.Visible='on';
-ylabel(t3_vel_axes,'Joint Velocity, $\dot{q}$ ($\frac{\mathrm{deg}}{\mathrm{s}}$)',Interpreter='latex');
-xlabel(t3_vel_axes,'Time, $t$ (s)',Interpreter='latex');
-title(t3_vel_axes,'Joint Velocities for Stitched LSPB with Constant Velcoity Traversing Waypoint C',Interpreter='latex');
+ylabel(t3_vel_axes,'Joint Velocity, $\dot{q}$ ($\frac{\mathrm{deg}}{\mathrm{s}}$)','fontsize',14,Interpreter='latex');
+xlabel(t3_vel_axes,'Time, $t$ (s)','fontsize',14,Interpreter='latex');
+title(t3_vel_axes,'Joint Velocities for Stitched LSPB with Constant Velcoity Traversing Waypoint C','fontsize',16,Interpreter='latex');
 
 t3_int_pos_plot = figure;
 subplot(2,2,1);
@@ -303,9 +303,9 @@ t3_int_axes = axes(t3_int_pos_plot,'visible','off');
 t3_int_axes.Title.Visible='on';
 t3_int_axes.XLabel.Visible='on';
 t3_int_axes.YLabel.Visible='on';
-ylabel(t3_int_axes,'Calculated Joint Positions, $q$ (deg)',Interpreter='latex');
-xlabel(t3_int_axes,'Time, $t$ (s)',Interpreter='latex');
-title(t3_int_axes,'Joint Positions for Stitched LSPB with Constant Velcoity Traversing Waypoint C',Interpreter='latex');
+ylabel(t3_int_axes,'Calculated Joint Positions, $q$ (deg)','fontsize',14,Interpreter='latex');
+xlabel(t3_int_axes,'Time, $t$ (s)','fontsize',14,Interpreter='latex');
+title(t3_int_axes,'Joint Positions for Stitched LSPB with Constant Velocity Traversing Waypoint C','fontsize',16,Interpreter='latex');
 
 %% Task 4
 
@@ -345,24 +345,64 @@ dthetalist = zeros(4,1);
 ddthetalist = zeros(4,1);
 g = [0; 0; -9.8];
 
-% Ftip = [0; 0; 0; 0; 0; -9.81*1.34];
-% 
-% taulist = InverseDynamics(thetalist, dthetalist, ddthetalist, g, Ftip, Mlist, Glist, Slist);
-% disp(taulist)
+wrenchlist = [1 1.47 1.38 1.27 0.5 0.295 0.155];
+
+% for i=1:7
+%     force = wrenchlist(i);
+%     Ftip = [0; 0; 0; 0; 0; -9.81*force];
+%     taulist = InverseDynamics(thetalist, dthetalist, ddthetalist, g, Ftip, Mlist, Glist, Slist);
+%     disp(taulist)
+% end
 
 taulist1 = [0.0195 0.0523 -1.0863 -0.2802]';
 taulist2 = [0.0266 0.3059 -1.2591 -0.3185]';
 taulist3 = [0.0284 0.3702 -1.3029 -0.3282]';
+taulist4 = [0.0212 0.1129 -1.1275 -0.2893]';
+taulist5 = [0.0311 0.4686 -1.3700 -0.3431]';
+taulist6 = [0.0292 0.4005 -1.3236 -0.3328]';
+taulist7 = [0.0269 0.3173 -1.2668 -0.3202]';
+taulist8 = [0.0106 -0.2656 -0.8696 -0.2322]';
+taulist9 = [0.0063 -0.4207 -0.7638 -0.2087]';
+taulist10 = [0.0033 -0.5267 -0.6916 -0.1927]';
 
-taulist = cat(2,taulist1,taulist2,taulist3);
+taulist = cat(2,taulist1,taulist2,taulist3,taulist4,taulist5,taulist6,taulist7,taulist8,taulist9,taulist10);
 
-currentlist1 = 0.001*[-1.6779 -351.2714 105.0698 -86.1333]';
-currentlist2 = 0.001*[4.8525 -301.0163 108.4967 -82.2824]';
-currentlist3 = 0.001*[40.1918 -376.2308 117.5688 -79.3286]';
+currentlist1 = [-1.6779 -351.2714 105.0698 -86.1333]';
+currentlist2 = [4.8525 -301.0163 108.4967 -82.2824]';
+currentlist3 = [40.1918 -376.2308 117.5688 -79.3286]';
+i_1kg = [0 -441.2127 36.1831 -84.6559]';
+i_1_47kg = [2.3620 -445.4246 63.5102 -80.8968]';
+i_1_38kg = [40.1918 -376.2308 117.5688 -79.3286]';
+i_1_27kg = [0.2110 -460.7284 62.5029 -83.8120]';
+i_0_5kg = [-3.0885 -426.8798 -99.1979 -92.7884]';
+i_0_295kg = [0 -429.6010 -79.5015 -87.7846]';
+i_0_155kg = [0.0607 -439.6229 -60.5351 -82.5608]';
 
-currentlist = cat(2,currentlist1,currentlist2,currentlist3);
+i_list = 0.001*cat(2, currentlist1, currentlist2, currentlist3, i_1kg, i_1_47kg, i_1_38kg, i_1_27kg, i_0_5kg, i_0_295kg, i_0_155kg);
+% wrenchlist = [1 1.47 1.38 1.27 0.5 0.295 0.155];
 
 figure
-plot(currentlist,taulist);
+plot(i_list',taulist');
 legend;
 
+torque_const = taulist./i_list
+
+torque_const_plot = figure;
+plot(torque_const(1,:),'.-'); hold on;
+plot(torque_const(2,:),'.-');
+plot(torque_const(3,:),'.-');
+plot(torque_const(4,:),'.-');
+axis padded
+legend("Joint 1","Joint 2","Joint 3","Joint 4");
+title("Torque Constant Calculated from Each Sample",'fontsize',16,Interpreter="latex")
+xlabel("Sample Number",'fontsize',14,Interpreter='latex'); ylabel("Torque Constant, $k_T$ ($\frac{\mathrm{Nm}}{\mathrm{A}}$)",'fontsize',14,Interpreter='latex');
+
+torque_const_J1 = torque_const(1,:); torque_const_J1(4) = NaN; torque_const_J1(7) = NaN; torque_const_J1(9:10) = NaN;
+kt_mean_J1 = mean(torque_const_J1,"omitmissing")
+kt_std_J1 = std(torque_const_J1, "omitmissing")
+kt_mean_J2 = mean(torque_const(2,:))
+kt_std_J2 = std(torque_const(2,:))
+kt_mean_J3 = mean(torque_const(3,:))
+kt_std_J3 = std(torque_const(3,:))
+kt_mean_J4 = mean(torque_const(4,:))
+kt_std_J4 = std(torque_const(4,:))
